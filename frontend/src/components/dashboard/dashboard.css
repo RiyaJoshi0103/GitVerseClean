@@ -1,0 +1,207 @@
+/* Base Styles */
+:root {
+    --github-dark: #0d1117;
+    --github-dark-secondary: #161b22;
+    --github-border: #30363d;
+    --github-text: #c9d1d9;
+    --github-text-secondary: #8b949e;
+    --github-blue: #58a6ff;
+    --github-green: #238636;
+    --github-purple: #8957e5;
+  }
+  
+  body {
+    background-color: var(--github-dark);
+    color: var(--github-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Dashboard Layout */
+  #dashboard {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: 16px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: calc(100vh - 60px);
+  }
+  
+  .dashboard-sidebar {
+    padding: 16px;
+  }
+  
+  .dashboard-main {
+    padding: 16px;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar-section {
+    margin-bottom: 24px;
+  }
+  
+  .sidebar-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--github-text);
+    border-bottom: 1px solid var(--github-border);
+    padding-bottom: 8px;
+  }
+  
+  /* Repository List Styles */
+  .repo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .repo-item {
+    border: 1px solid var(--github-border);
+    border-radius: 6px;
+    padding: 16px;
+    background-color: var(--github-dark-secondary);
+    transition: border-color 0.2s;
+  }
+  
+  .repo-item:hover {
+    border-color: var(--github-blue);
+  }
+  
+  .repo-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: var(--github-blue);
+  }
+  
+  .repo-description {
+    font-size: 14px;
+    color: var(--github-text-secondary);
+    margin: 0 0 12px 0;
+  }
+  
+  .repo-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--github-text-secondary);
+  }
+  
+  .repo-language {
+    display: flex;
+    align-items: center;
+  }
+  
+  .repo-language::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--github-purple);
+    margin-right: 4px;
+  }
+  
+  .repo-stars {
+    display: flex;
+    align-items: center;
+  }
+  
+  .repo-updated {
+    margin-left: auto;
+  }
+  
+  /* Search Styles */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .dashboard-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .dashboard-search {
+    flex-grow: 1;
+    max-width: 400px;
+    margin-left: 16px;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 6px 12px;
+    background-color: var(--github-dark-secondary);
+    border: 1px solid var(--github-border);
+    border-radius: 6px;
+    color: var(--github-text);
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .search-input:focus {
+    border-color: var(--github-blue);
+    box-shadow: 0 0 0 3px rgba(56, 139, 253, 0.15);
+  }
+  
+  /* Events List Styles */
+  .events-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .event-item {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--github-border);
+  }
+  
+  .event-item:last-child {
+    border-bottom: none;
+  }
+  
+  .event-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .event-date {
+    font-size: 12px;
+    color: var(--github-text-secondary);
+    margin: 4px 0 0 0;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 1024px) {
+    #dashboard {
+      grid-template-columns: 1fr;
+    }
+    
+    .dashboard-sidebar {
+      order: 2;
+    }
+    
+    .dashboard-main {
+      order: 1;
+    }
+    
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .dashboard-search {
+      width: 100%;
+      max-width: none;
+      margin-left: 0;
+      margin-top: 12px;
+    }
+  }

@@ -1,0 +1,97 @@
+/* GitHub-like Navbar Styles */
+:root {
+  --github-dark: #0d1117;
+  --github-dark-secondary: #161b22;
+  --github-border: #30363d;
+  --github-text: #c9d1d9;
+  --github-text-secondary: #8b949e;
+  --github-blue: #58a6ff;
+  --github-white: #f0f6fc;
+}
+
+.navbar-container {
+  background-color: var(--github-dark);
+  border-bottom: 1px solid var(--github-border);
+  padding: 0 16px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-left, .navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--github-white);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.navbar-logo {
+  color: var(--github-white);
+}
+
+.navbar-title {
+  margin-left: 4px;
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--github-text);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.navbar-link:hover {
+  background-color: var(--github-dark-secondary);
+  color: var(--github-white);
+}
+
+.navbar-icon {
+  color: var(--github-text-secondary);
+}
+
+.navbar-link:hover .navbar-icon {
+  color: var(--github-white);
+}
+
+/* GitHub-like focus state */
+.navbar-link:focus {
+  outline: 2px solid var(--github-blue);
+  outline-offset: -2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 8px;
+  }
+  
+  .navbar-link span {
+    display: none;
+  }
+  
+  .navbar-link {
+    padding: 8px;
+  }
+  
+  .navbar-title {
+    display: none;
+  }
+}
