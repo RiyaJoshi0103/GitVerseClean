@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const http = require("http"); 
+const http = require("http");
 const { Server } = require("socket.io");
 const mainRouter = require("./routes/main.router");
 
@@ -13,12 +13,12 @@ const { hideBin } = require("yargs/helpers");
 const { initRepo } = require("./controllers/init");
 const { addRepo } = require("./controllers/add");
 const { pushRepo } = require("./controllers/push");
-const { commitRepo} = require("./controllers/commit");
+const { commitRepo } = require("./controllers/commit");
 const { revertRepo } = require("./controllers/revert");
 const { pullRepo } = require("./controllers/pull");
-const { AmplifyBackend } = require("aws-sdk");
 
 dotenv.config();
+
 yargs(hideBin(process.argv))
   .command("start", "Start the server", {}, startServer)
   .command("init", "Initialize new command", {}, initRepo)
@@ -40,7 +40,7 @@ yargs(hideBin(process.argv))
     "Commit the staged files",
     (yargs) => {
       yargs.positional("message", {
-        describe: "Commit mesage",
+        describe: "Commit message",
         type: "string",
       });
     },
@@ -50,13 +50,12 @@ yargs(hideBin(process.argv))
   )
   .command("push", "Push the changes to s3", {}, pushRepo)
   .command("pull", "Pull the changes from remote repository", {}, pullRepo)
-
   .command(
     "revert <commitID>",
     "Revert to a specific commit",
     (yargs) => {
       yargs.positional("commitID", {
-        describe: "Comit ID to revert to",
+        describe: "Commit ID to revert to",
         type: "string",
       });
     },
@@ -67,58 +66,57 @@ yargs(hideBin(process.argv))
   .demandCommand(1, "You need at least one command")
   .help().argv;
 
-  function startServer() {
-    const app = express();
-    const port = process.env.PORT || 3000;
+function startServer() {
+  const app = express();
+  const port = process.env.PORT || 3000;
 
-    // ✅ Enable CORS before routes
-    app.use(
-      cors({
-        origin: "http://localhost:5173",
-        credentials: true,
-      })
-    );
+  // ✅ Enable CORS before routes
+  app.use(
+    cors({
+      origin: "http://localhost:5173", // Or update with Ingress domain if needed
+      credentials: true,
+    })
+  );
 
-    app.use(bodyParser.json());
-    app.use(express.json());
+  app.use(bodyParser.json());
+  app.use(express.json());
 
-    const mongoURI = process.env.MONGO_URI;
+  const mongoURI = process.env.MONGO_URI;
 
-    mongoose
-      .connect(mongoURI)
-      .then(() => console.log("MongoDB connected!"))
-      .catch((err) => console.log("Unable to connect to MongoDB", err));
+  mongoose
+    .connect(mongoURI)
+    .then(() => console.log("✅ MongoDB connected!"))
+    .catch((err) => console.log("❌ Unable to connect to MongoDB", err));
 
-    app.use("/", mainRouter);
+  app.use("/", mainRouter);
 
-    let user = "test";
+  let user = "test";
 
-    const httpServer = http.createServer(app);
-    const io = new Server(httpServer, {
-      cors: {
-        origin: "*", // This is fine for socket.io, separate from HTTP
-        methods: ["GET", "POST"],
-      },
+  const httpServer = http.createServer(app);
+  const io = new Server(httpServer, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  });
+
+  io.on("connection", (socket) => {
+    socket.on("joinRoom", (userId) => {
+      user = userId;
+      console.log("===");
+      console.log(user);
+      console.log("===");
+      socket.join(userId);
     });
+  });
 
-    io.on("connection", (socket) => {
-      socket.on("joinRoom", (userId) => {
-        user = userId;
-        console.log("===");
-        console.log(user);
-        console.log("===");
-        socket.join(userId);
-      });
-    });
+  const db = mongoose.connection;
+  db.once("open", async () => {
+    console.log("✅ CRUD operations initialized.");
+  });
 
-    const db = mongoose.connection;
-    db.once("open", async () => {
-      console.log("CRUD operations called successfully!");
-    });
-
-    httpServer.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
-    });
-  }
-  
-  
+  // ✅ Critical fix: Bind to 0.0.0.0 to make it accessible from outside the pod
+  httpServer.listen(port, "0.0.0.0", () => {
+    console.log(`🚀 Server is running on port ${port}`);
+  });
+}
