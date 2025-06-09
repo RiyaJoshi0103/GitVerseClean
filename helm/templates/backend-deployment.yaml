@@ -1,10 +1,9 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
 spec:
-  replicas: 1
+  replicas: {{ .Values.backend.replicaCount }}
   selector:
     matchLabels:
       app: backend
@@ -15,6 +14,6 @@ spec:
     spec:
       containers:
         - name: backend
-          image: riyajoshi/gitverse-backend:latest
+          image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           ports:
-            - containerPort: 3000
+            - containerPort: {{ .Values.backend.service.port }}

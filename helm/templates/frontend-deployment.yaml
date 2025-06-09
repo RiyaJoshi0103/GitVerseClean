@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: frontend-deployment
 spec:
-  replicas: 1
+  replicas: {{ .Values.frontend.replicaCount }}
   selector:
     matchLabels:
       app: frontend
@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: riyajoshi/gitverse-frontend:latest
+          image: {{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}
           ports:
-            - containerPort: 80  # IMPORTANT: Use 80, not 5173
+            - containerPort: {{ .Values.frontend.service.port }}
